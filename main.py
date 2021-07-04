@@ -12,6 +12,7 @@ class CogList:
 
   cogs = [
     "cogs.core",
+    "cogs.stats",
   ]
 
 
@@ -28,14 +29,6 @@ async def on_ready():
   bot.loop.create_task(status_changer())
   await load_all_cogs()
 
-
-@bot.event
-async def on_message(message: discord.Message):
-  if not message.content:
-    return
-  if message.mentions:
-    print(message.mentions + "is based")
-    pass 
 
 
 
@@ -56,6 +49,14 @@ async def status_changer():
     await asyncio.sleep(20)
     activity = random.choice(config["activities"])
     await bot.change_presence(activity=discord.Activity(name=activity["name"], type=discord.ActivityType[activity["status"]]))
+
+
+def starttime(current_time):
+    """takes the current time and returns the bot's uptime"""
+    uptime = current_time - bot_uptime
+    return uptime
+
+
 
 def main(secret):
   bot.run(secret)
