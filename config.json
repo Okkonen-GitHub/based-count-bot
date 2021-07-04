@@ -1,0 +1,15 @@
+{
+  "activities": [
+    {
+      "status": "listening",
+      "name": ".help"
+    },
+    {
+      "status": "playing",
+      "name": "with you"
+    }
+  ],
+  "devs": {
+    "Okkonen#5411" : "357166445630849027"
+  }
+}
