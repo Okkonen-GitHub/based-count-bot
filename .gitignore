@@ -1,6 +1,10 @@
 # secrets
 secrets.txt
 
+cogs/based.sqlite-journal
+cogs/based.sqlite.sqbpro
+
+
 __pycache__/
 *.py[cod]
 *$py.class

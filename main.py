@@ -12,7 +12,8 @@ class CogList:
 
   cogs = [
     "cogs.core",
-    "cogs.stats",
+    "cogs.misc",
+    "cogs.counter"
   ]
 
 
@@ -43,7 +44,7 @@ async def load_all_cogs():
 
 
 async def status_changer():
-  with open(f'{os.path.dirname(__file__)}/config.json') as conf:
+  with open(f'{os.path.dirname(__file__)}/cogs/config.json') as conf:
     config = json.load(conf)
   while True:
     await asyncio.sleep(20)
@@ -55,7 +56,6 @@ def starttime(current_time):
     """takes the current time and returns the bot's uptime"""
     uptime = current_time - bot_uptime
     return uptime
-
 
 
 def main(secret):

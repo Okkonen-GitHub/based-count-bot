@@ -4,7 +4,7 @@ from discord.ext.commands import Cog
 import discord
 
 
-class Stats(Cog):
+class Misc(Cog):
 
   def __init__(self, bot):
     self.bot = bot
@@ -14,6 +14,10 @@ class Stats(Cog):
     coin = ["heads", "tails"]
     flipped = (random.choice(coin))
     return await ctx.send(f"The coin landed on {flipped}")
+  
+  @command(name='based', aliases = [], hidden=True)
+  async def _based(self, ctx):
+    await ctx.send("I'm already based enough")
 
 def setup(bot):
-  bot.add_cog(Stats(bot))
+  bot.add_cog(Misc(bot))
