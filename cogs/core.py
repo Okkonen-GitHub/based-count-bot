@@ -65,6 +65,10 @@ class Core(Cog):
       name="Bot Uptime:",
       value=f"{str(starttime(current_time))[:-7]}"
     )
+    embed.add_field(
+      name="Bot source and additional info",
+      value=f"[GitHub](https://github.com/Okkonen-GitHub/based-count-bot)\nPowered by [repl.it](https://repl.it) & discord.py"
+    )
     embed.set_footer(
       text=f"CPU: {ps.cpu_percent()}/{psutil.cpu_percent()}% | RAM {byte_converter(ps.memory_full_info().rss)} ({round(ps.memory_percent(), 1)}%)",
       icon_url = "https://media.discordapp.net/attachments/514213558549217330/514345278669848597/8yx98C.gif"
