@@ -8,6 +8,7 @@ authors = ["OkkonenGitHub <<>>"]
 python = "^3.8"
 discord = "^1.7.3"
 psutil = "^5.8.0"
+Flask = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 

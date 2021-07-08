@@ -99,7 +99,7 @@ class Core(Cog):
       await ctx.send(f"Failed to unoad {ext} [{err}]")
       print(f"Failed to unoad {ext} [{err}]")
   
-
+  @check(is_dev)
   @command(name='list_ext', aliases = ["extls", "ls", "lsext", "loaded", "list"], hidden=True)
   async def _list_ext(self, ctx):
     e = discord.Embed(color = 0xff5100)
@@ -109,7 +109,7 @@ class Core(Cog):
     e.description = f"**These are the loaded cogs at the moment:**\n{cogs}"
     await ctx.send(embed = e)
 
-
+  @check(is_dev)
   @command(name='reload', aliases = ["rext", "extr", "re"], hidden=True)
   async def _reload(self, ctx, ext = "all"):
     active_cogs = list(self.bot.cogs)

@@ -8,6 +8,9 @@ from discord.ext.commands import when_mentioned_or
 from discord.ext.commands import ExtensionError
 import datetime
 
+from keep_alive import keep_alive
+
+
 class CogList:
 
   cogs = [
@@ -63,4 +66,5 @@ def main(secret):
 
 if __name__ == "__main__":
   secret = os.environ["TOKEN"]
+  keep_alive()
   main(secret)
