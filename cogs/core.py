@@ -67,7 +67,8 @@ class Core(Cog):
     )
     embed.add_field(
       name="Bot source and additional info",
-      value=f"[GitHub](https://github.com/Okkonen-GitHub/based-count-bot)\nPowered by [repl.it](https://repl.it) & discord.py"
+      value=f"[GitHub](https://github.com/Okkonen-GitHub/based-count-bot) Source code\nPowered by [repl.it](https://repl.it) & discord.py",
+      inline=False
     )
     embed.set_footer(
       text=f"CPU: {ps.cpu_percent()}/{psutil.cpu_percent()}% | RAM {byte_converter(ps.memory_full_info().rss)} ({round(ps.memory_percent(), 1)}%)",
