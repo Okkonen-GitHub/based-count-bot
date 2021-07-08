@@ -9,7 +9,7 @@ class Misc(Cog):
   def __init__(self, bot):
     self.bot = bot
 
-  @command(description="flips a coin", aliases = ["flip", "cflip", "coin"])
+  @command(description="flips a coin", aliases = ["flip", "cflip", "coin"], hidden=True)
   async def coinflip(self, ctx):
     coin = ["heads", "tails"]
     flipped = (random.choice(coin))

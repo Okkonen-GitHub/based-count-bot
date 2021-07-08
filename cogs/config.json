@@ -2,7 +2,15 @@
   "activities": [
     {
       "status": "listening",
-      "name": ".help"
+      "name": "b!help"
+    },
+    {
+      "status": "listening",
+      "name": "messages"
+    },
+    {
+      "status": "playing",
+      "name": "with the database"
     },
     {
       "status": "playing",

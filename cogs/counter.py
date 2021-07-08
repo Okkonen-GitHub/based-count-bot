@@ -1,7 +1,11 @@
+import asyncio
+from email.policy import default
 import os
+from unittest import result
 from discord.ext.commands import command
 from discord.ext.commands import Cog
-from discord.ext.commands import guild_only
+from discord.ext.commands import Context
+from discord.errors import NotFound
 import discord
 
 import sqlite3
@@ -35,7 +39,7 @@ class DataBase:
       return f"Updated db"
 
   def select_all(self):
-    sql = "SELECT * from users"
+    sql = "SELECT * from users ORDER BY based_count"
     self.cursor.execute(sql)
     result = self.cursor.fetchall()
     return result
@@ -72,18 +76,61 @@ class Counter(Cog):
               query = self.db.get_based(message.mentions[0].id)
               if query:
                 self.db.update(int(query[0]) + 1, message.mentions[0].id)
-                await message.channel.send(content=f"{message.mentions[0]} has now based count of {int(query[0])+1}")
+                await message.channel.send(content=f"{message.mentions[0]} has now based count of {int(query[0])+1}", delete_after=5)
               if not query:
                 self.db.insert(message.mentions[0].id, 1)
-                await message.channel.send(content=f"{message.mentions[0]} has now based count of 1")
+                await message.channel.send(content=f"{message.mentions[0]} has now based count of 1, their first one!", delete_after=5)
 
 
-  @command(name='leaderboard', aliases = ['lb', 'leaderb', ''])
-  async def _leaderboard(self, ctx,):
+  @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard <page number>`", description="Show the leaderboard")
+  async def _leaderboard(self, ctx):
+    """Show the leaderboard sorted and 'paged' """
+    
     result = self.db.select_all()
-    e = discord.Embed(color=0xdd6666)
-    e.add_field(name="Leaderboard", value=f"{result}")
-    await ctx.send(embed=e)
+
+
+    leader_board = {}    
+
+    for i, user in enumerate(reversed(range(len(result)))):
+      try:
+        username = await self.bot.fetch_user(result[user][0])
+      except NotFound:
+        username = "User not found"
+      leader_board[i] = username, result[user][1]
+    
+    top_ten = {}
+    for i, user in enumerate(range(len(leader_board))):
+      if i < 10:
+        top_ten[i] = leader_board[user]
+        leader_board.pop(i)
+      else:
+        break
+
+    default = discord.Embed(color=0xdd6666)
+    default.set_author(name="Leaderboard", icon_url=self.bot.user.avatar_url)
+    value = "\n".join(
+      [
+        f"`{pos+1}.` -  {usr[0]} - Score: {usr[1]}"
+        for pos, usr, in top_ten.items()
+      ]
+    )
+    default.add_field(name="Top 10", value=value)
+
+    await ctx.send(embed=default)
+  
+  @command(name='stats', aliases = ["stat"], usage="`b!stats [@user]`", description="Show your or someone elses stats")
+  async def _stats(self, ctx: Context, user:discord.User = None):
+    e = discord.Embed(color=0xdd6666).set_author(name="Leaderboard", icon_url=self.bot.user.avatar_url)
+    try:
+      if user is None:
+        result = self.db.get_based(ctx.author.id)
+        e.add_field(name="Your based score is: ", value=f"{result[0]}")
+      elif user is not None:
+        result = self.db.get_based(user.id)
+      e.add_field(name=f"{user.name} has a based score of: ", value=f"{result[0]}")
+      await ctx.send(embed=e)
+    except TypeError as err:
+      await ctx.send(f"User not found in database [{err}]")
   
 
 def setup(bot):

@@ -6,27 +6,26 @@ import discord
 from discord.ext.commands import Bot
 from discord.ext.commands import when_mentioned_or
 from discord.ext.commands import ExtensionError
-from datetime import datetime
+import datetime
 
 class CogList:
 
   cogs = [
     "cogs.core",
+    "cogs.counter",
     "cogs.misc",
-    "cogs.counter"
   ]
 
 
 bot = Bot(command_prefix=when_mentioned_or("b!"))
 bot.remove_command("help")
 
-bot_uptime = None
+bot_uptime = datetime.datetime.now() 
 
 @bot.event
 async def on_ready():
   global bot_uptime
   print(f"Logged in as {bot.user}\nAvailable in servers: {bot.guilds[0]}")
-  bot_uptime = datetime.now() # save the timedelta when bot is activated
   bot.loop.create_task(status_changer())
   await load_all_cogs()
 
