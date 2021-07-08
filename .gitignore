@@ -1,5 +1,5 @@
-# secrets
-secrets.txt
+# env variables
+.env
 
 cogs/based.sqlite-journal
 cogs/based.sqlite.sqbpro
