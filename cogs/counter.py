@@ -2,11 +2,18 @@ import os
 from discord.ext.commands import command
 from discord.ext.commands import Cog
 from discord.ext.commands import Context
+from discord.ext.commands import check
 from discord.errors import NotFound
 import discord
+import json
 
 import sqlite3
 
+
+def is_dev(ctx):
+  with open(f"{os.path.dirname(__file__)}/config.json", "r") as f:
+    conf = json.load(f)
+  return str(ctx.author.id) in conf["devs"].values()
 
 class DataBase:
   
@@ -62,6 +69,19 @@ class Counter(Cog):
 
   def __init__(self, bot):
     self.bot = bot
+
+  @check(is_dev)
+  @command(name="ct", hidden=True)
+  async def _ct(self, ctx):
+    self.db.cursor.execute(
+      '''
+      CREATE TABLE "users" (
+      "user_id"	TEXT NOT NULL UNIQUE,
+      "based_count"	INTEGER DEFAULT 0
+      )
+      '''
+    )
+
 
   @Cog.listener()
   async def on_message(self, message: discord.Message):
