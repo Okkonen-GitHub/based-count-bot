@@ -62,6 +62,6 @@ def main(secret):
 
 
 if __name__ == "__main__":
-  with open(f'{os.path.dirname(__file__)}/secrets.txt') as secrets:
+  with open(f'{os.path.dirname(__file__)}/.env') as secrets:
     secret = secrets.readline()
   main(secret)

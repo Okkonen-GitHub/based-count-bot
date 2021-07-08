@@ -3,7 +3,7 @@
 
 cogs/based.sqlite-journal
 cogs/based.sqlite.sqbpro
-
+cogs/based.sqlite
 
 __pycache__/
 *.py[cod]
