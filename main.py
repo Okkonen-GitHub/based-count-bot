@@ -43,7 +43,7 @@ async def load_all_cogs():
 
 
 async def status_changer():
-  with open(f'{os.path.dirname(__file__)}/cogs/config.json') as conf:
+  with open(f'./cogs/config.json') as conf:
     config = json.load(conf)
   while True:
     await asyncio.sleep(20)
@@ -62,6 +62,5 @@ def main(secret):
 
 
 if __name__ == "__main__":
-  with open(f'{os.path.dirname(__file__)}/.env') as secrets:
-    secret = secrets.readline()
+  secret = os.environ["TOKEN"]
   main(secret)

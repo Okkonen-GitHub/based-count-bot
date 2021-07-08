@@ -1,3 +1,5 @@
+
+my_secret = os.environ['TOKEN']
 # env variables
 .env
 
