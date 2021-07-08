@@ -1,7 +1,6 @@
 import random
 from discord.ext.commands import command
 from discord.ext.commands import Cog
-import discord
 
 
 class Misc(Cog):

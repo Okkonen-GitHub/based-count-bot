@@ -1,7 +1,4 @@
-import asyncio
-from email.policy import default
 import os
-from unittest import result
 from discord.ext.commands import command
 from discord.ext.commands import Cog
 from discord.ext.commands import Context
@@ -82,7 +79,7 @@ class Counter(Cog):
                 await message.channel.send(content=f"{message.mentions[0]} has now based count of 1, their first one!", delete_after=5)
 
 
-  @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard <page number>`", description="Show the leaderboard")
+  @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard`", description="Show the top 10 most based users")
   async def _leaderboard(self, ctx):
     """Show the leaderboard sorted and 'paged' """
     
@@ -119,16 +116,17 @@ class Counter(Cog):
     await ctx.send(embed=default)
   
   @command(name='stats', aliases = ["stat"], usage="`b!stats [@user]`", description="Show your or someone elses stats")
-  async def _stats(self, ctx: Context, user:discord.User = None):
-    e = discord.Embed(color=0xdd6666).set_author(name="Leaderboard", icon_url=self.bot.user.avatar_url)
+  async def _stats(self, ctx: Context, user: discord.User = None):
     try:
+      e = discord.Embed(color=0xdd6666).set_author(name="Stats", icon_url=self.bot.user.avatar_url)
       if user is None:
         result = self.db.get_based(ctx.author.id)
         e.add_field(name="Your based score is: ", value=f"{result[0]}")
       elif user is not None:
         result = self.db.get_based(user.id)
-      e.add_field(name=f"{user.name} has a based score of: ", value=f"{result[0]}")
+        e.add_field(name=f"{user.name} has a based score of: ", value=f"{result[0]}")
       await ctx.send(embed=e)
+    
     except TypeError as err:
       await ctx.send(f"User not found in database [{err}]")
   
