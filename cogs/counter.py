@@ -75,13 +75,24 @@ class Counter(Cog):
   async def _ct(self, ctx):
     self.db.cursor.execute(
       '''
-      CREATE TABLE "users" (
+      CREATE TABLE IF NOT EXISTS "users" (
       "user_id"	TEXT NOT NULL UNIQUE,
       "based_count"	INTEGER DEFAULT 0
       )
       '''
     )
 
+  @check(is_dev)
+  @command(name='emtpytable', aliases = ["cleardb", "cleartable"])
+  async def _emtpydb(self, ctx, *, q:str):
+    if q == "yes i am very sure":
+      self.db.cursor.execute(
+        '''
+        DROP TABLE "users"
+        '''
+      )
+    else:
+      await ctx.send("Are you sure tho? Use `cleartable yes i am very sure")
 
   @Cog.listener()
   async def on_message(self, message: discord.Message):
