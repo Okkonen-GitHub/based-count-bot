@@ -56,7 +56,7 @@ class Core(Cog):
       name="Bot info",
       icon_url=self.bot.user.avatar_url
     )
-    embed.description = "This is a custom bot created by Okkonen#5411.\nIt is used to keep track of how many times people are called based.\n\nHow to use: `@some-user based`\n"
+    embed.description = "This is a custom bot created by Okkonen#5411.\nIt is used to keep track of how many times people are called based.\n\nHow to use: `@some-user based`\nYou can check here if the bot is online [here](https://based-count-bot.okkonengithub.repl.co)"
     embed.add_field(
       name="Current Ping:",
       value=f"{round(self.bot.latency * 1000, 1)} ms"

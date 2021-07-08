@@ -83,8 +83,8 @@ class Counter(Cog):
     )
 
   @check(is_dev)
-  @command(name='emtpytable', aliases = ["cleardb", "cleartable"])
-  async def _emtpydb(self, ctx, *, q:str):
+  @command(name='emtpydb', aliases = ["cleardb", "cleartable"], hidden=True)
+  async def _emtpydb(self, ctx, *, q:str = ""):
     if q == "yes i am very sure":
       self.db.cursor.execute(
         '''
@@ -92,7 +92,7 @@ class Counter(Cog):
         '''
       )
     else:
-      await ctx.send("Are you sure tho? Use `cleartable yes i am very sure")
+      await ctx.send("Are you sure tho? Use `b!cleartable yes i am very sure`")
 
   @Cog.listener()
   async def on_message(self, message: discord.Message):
@@ -113,9 +113,18 @@ class Counter(Cog):
   @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard`", description="Show the top 10 most based users")
   async def _leaderboard(self, ctx):
     """Show the leaderboard sorted and 'paged' """
-    
-    result = self.db.select_all()
-
+    try:
+      result = self.db.select_all()
+    except:
+      self.db.cursor.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS "users" (
+      "user_id"	TEXT NOT NULL UNIQUE,
+      "based_count"	INTEGER DEFAULT 0
+      )
+      '''
+      )
+      await ctx.send("There was no database so automatically created one")
 
     leader_board = {}    
 
@@ -143,7 +152,6 @@ class Counter(Cog):
       ]
     )
     default.add_field(name="Top 10", value=value)
-
     await ctx.send(embed=default)
   
   @command(name='stats', aliases = ["stat"], usage="`b!stats [@user]`", description="Show your or someone elses stats")
