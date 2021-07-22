@@ -1,3 +1,4 @@
+import asyncio
 import os
 from discord.ext.commands import command
 from discord.ext.commands import Cog
@@ -96,6 +97,11 @@ class Counter(Cog):
 
   @Cog.listener()
   async def on_message(self, message: discord.Message):
+
+    async def add_reactions(message):
+      """Add reactions in the background to speed thing up"""
+      await message.add_reaction("🗑️")
+
     if not message.author.bot:
       if message.content is not None:
         if len(message.mentions) > 0:
@@ -104,10 +110,31 @@ class Counter(Cog):
               query = self.db.get_based(message.mentions[0].id)
               if query:
                 self.db.update(int(query[0]) + 1, message.mentions[0].id)
-                await message.channel.send(content=f"{message.mentions[0]} has now based count of {int(query[0])+1}", delete_after=5)
+                msg = await message.channel.send(content=f"{message.mentions[0]} has now based count of {int(query[0])+1}")
               if not query:
                 self.db.insert(message.mentions[0].id, 1)
-                await message.channel.send(content=f"{message.mentions[0]} has now based count of 1, their first one!", delete_after=60)
+                msg = await message.channel.send(content=f"{message.mentions[0]} has now based count of 1, their first one!")
+              self.bot.loop.create_task(add_reactions(msg))
+              while True:
+
+                def predicate(react, usr):
+                  return (
+                    react.message.id == msg.id
+                    and str(react.emoji) in ["🗑️"]
+                  )
+                try:
+                  reaction, user = await self.bot.wait_for(
+                    "reaction_add", timeout=120.0, check=predicate
+                  )
+                except asyncio.TimeoutError:
+                  return await msg.clear_reactions()
+                emoji = str(reaction.emoji)
+                try:
+                  await message.remove_reaction(reaction, user)
+                except discord.errors.Forbidden as err:
+                  await message.channel.send(f"Error [{err}]")
+                if emoji:
+                  return await message.delete()
 
 
   @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard`", description="Show the top 10 most based users")
