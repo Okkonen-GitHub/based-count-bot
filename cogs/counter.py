@@ -107,7 +107,7 @@ class Counter(Cog):
                 await message.channel.send(content=f"{message.mentions[0]} has now based count of {int(query[0])+1}", delete_after=5)
               if not query:
                 self.db.insert(message.mentions[0].id, 1)
-                await message.channel.send(content=f"{message.mentions[0]} has now based count of 1, their first one!", delete_after=5)
+                await message.channel.send(content=f"{message.mentions[0]} has now based count of 1, their first one!", delete_after=60)
 
 
   @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard`", description="Show the top 10 most based users")
