@@ -121,6 +121,7 @@ class Counter(Cog):
                   return (
                     react.message.id == msg.id
                     and str(react.emoji) in ["🗑️"]
+                    and usr != self.bot.user
                   )
                 try:
                   reaction, user = await self.bot.wait_for(
@@ -131,10 +132,9 @@ class Counter(Cog):
                 emoji = str(reaction.emoji)
                 try:
                   await message.remove_reaction(reaction, user)
+                  return await msg.delete()
                 except discord.errors.Forbidden as err:
                   await message.channel.send(f"Error [{err}]")
-                if emoji:
-                  return await message.delete()
 
 
   @command(name='leaderboard', aliases = ['lb', 'leaderb', 'top'], usage="`b!leaderboard`", description="Show the top 10 most based users")
